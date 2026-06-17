@@ -118,7 +118,7 @@ const sketch2 = (p) => {
 
     p.preload = () => {
         bgImage = p.loadImage("selector.png");
-        image = p.loadImage("close2.png");
+        image = p.loadImage("close.png");
     };
 
     p.setup = () => {
