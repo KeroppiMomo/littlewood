@@ -25,7 +25,7 @@ const sketch1 = (p) => {
     const crossRadius = 0.05;
 
     function setCaption() {
-        document.getElementById("coordsCaption").innerHTML = `z = (${state.pointX.toFixed(3)}, ${state.pointY.toFixed(3)})`;
+        document.getElementById("coordsCaption").innerHTML = `z = ${state.pointX.toFixed(3)}${state.pointY.toFixed(3)}i`;
     }
 
     p.preload = () => {
