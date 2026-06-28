@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Littlewood polynomials and dragon curves</title>
+
+    <style>
+        html {
+            background-color: black;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 20px;
+            font-family: serif;
+            overflow: hidden;
+        }
+
+        .top {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .bottom {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .canvas-container {
+            border: none;
+        }
+
+        .canvas-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .caption {
+            margin-top: 8px;
+            text-align: center;
+            font-size: 32px;
+            color: #eee;
+        }
+
+        #desc {
+            padding: 8px;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="top">
+        <div class="canvas-block">
+            <div id="canvas1" class="canvas-container"></div>
+            <div id="coordsCaption" class="caption"></div>
+        </div>
+    </div>
+
+    <div class="bottom">
+        <div class="canvas-block">
+            <div id="canvas2" class="canvas-container"></div>
+            <div class="caption">D</div>
+        </div>
+
+        <div class="canvas-block">
+            <div id="canvas3" class="canvas-container"></div>
+            <div class="caption">A(z)</div>
+        </div>
+    </div>
+
+    <p id="desc">
+    A demonstration for <a href="..">"The Beauty of Littlewood Polynomials"</a>.
+    Images of D are created using <a href="">Greg Egan's applet</a>.
+    </p>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+    <script src="main.js"></script>
+
+</body>
+</html>

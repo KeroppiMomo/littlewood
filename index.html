@@ -1,73 +1,1332 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html>
 <head>
+    <title>The Beauty of Littlewood Polynomials</title>
+    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fractal Explorer</title>
-
-    <style>
-        html {
-            background-color: black;
-        }
-
-        body {
-            margin: 20px;
-            font-family: serif;
-        }
-
-        .top {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .bottom {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .canvas-container {
-            border: none;
-        }
-
-        .canvas-block {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .caption {
-            margin-top: 8px;
-            text-align: center;
-            font-size: 32px;
-            color: #eee;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 </head>
 <body>
 
-    <div class="top">
-        <div class="canvas-block">
-            <div id="canvas1" class="canvas-container"></div>
-            <div id="coordsCaption" class="caption"></div>
-        </div>
+<h1>The Beauty of Littlewood Polynomials</h1>
+<p>28 June 2026, <a href="/">Moses Mok</a></p>
+
+<p>The story began with me searching around online for a maths-themed wallpaper
+(because I'm a massive nerd).
+Fractals had never interested me that much:
+the <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot set</a>
+is so well-known that I thought it would seem lame to set it as wallpaper!
+I eventually came across blog posts by John Baez, Dan Christensen and Sam Derbyshire
+<a href="#ref-1">[1]</a>
+<a href="#ref-1">[2]</a>
+<a href="#ref-1">[3]</a>
+<a href="#ref-1">[4]</a>,
+where I found a fascinating picture of roots of polynomials.</p>
+
+<p>To me, polynomials are boring mathematical objects
+that I first encountered back in high school algebra classes
+and have since learned to deal with.
+It was quite surprising that a picture of polynomial roots
+can contain intricate patterns,
+so I set it as my wallpaper.</p>
+
+<p>
+Fast forward to two weeks ago,
+I finished my exams, got bored,
+and (again, because I'm a massive nerd)
+decided to sign up to give a <a href="https://github.com/KeroppiMomo/littlewood/releases/download/uh/slides.pdf">student talk</a>
+at <a href="https://archim.org.uk/">the Archimedeans</a>,
+the university-wide maths society at Cambridge.
+It was only after I started diving deeper into the maths behind the wallpaper
+that I realised how much interesting theory is involved.
+Hopefully by the end of this, you'll be convinced that
+polynomials are actually beautiful!</p>
+
+<p>
+<i>The first half of this expository writing should be accessible to most STEM students
+with knowledge of sets, complex numbers and calculus.
+The second half is more targeted
+at readers with second or third-year undergraduate mathematics knowledge.</i>
+</p>
+
+<h2>The setup</h2>
+Let's begin by defining what Littlewood polynomials are.
+
+<div class="callout callout-def">
+<div class="callout-title">Definition 1.</div>
+A <dfn>Littlewood polynomial</dfn> is a polynomial with coefficients $+1$ or $-1$,
+i.e. one of the form
+$$
+a_0 + a_1 z + a_2 z^2 + \ldots + a_d z^d, \qquad a_n \in \{+1, -1\}.
+$$
+
+We write $\mathcal D$ for the complex roots of all Littlewood polynomials:
+$$
+\mathcal{D} := \{z\in \mathbb C \mid \text{$\exists$ Littlewood polynomial $\ell$ such that $\ell(z) = 0$}\}.
+$$
+</div>
+
+<p>
+We would like to visualise $\mathcal D$.
+It is, of course, impossible to compute the roots of all infinitely many Littlewood polynomials,
+so we'll only plot the roots of all Littlewood polynomials of degree 36
+(of which there are $2^{37}$ many) on the complex plane.
+</p>
+
+<p>
+Here we go!
+</p>
+
+<figure>
+    <img src="full.png" width="100%">
+    <figcaption>
+        <b>Figure 1.</b> Roots of all Littlewood polynomials of degree 36.
+        Made by <a href="https://www.gregegan.net/SCIENCE/Littlewood/Littlewood.html">Greg Egan</a>.
+        He also explains the colour scheme on his webpage.
+    </figcaption>
+</figure>
+
+<p>
+You can visit an interactive version of a plot for degree 24
+<a href="https://jdc.math.uwo.ca/roots/deepzoom/roots24.html">here</a>,
+made by Dan Christensen.
+</p>
+
+<p>
+This looks quite pretty!
+The black spots on the sides are $-1$ and $+1$,
+and the "ring" is the unit circle.
+Let's zoom into the region near $-0.8i$.
+</p>
+
+<figure>
+    <img src="fractal.png" width="100%">
+    <figcaption>
+        <b>Figure 2.</b> Close-up of Figure 1 near $-0.8i$.
+        Created using <a href="https://www.gregegan.net/SCIENCE/Littlewood/Littlewood.html">Greg Egan's applet</a>.
+    </figcaption>
+</figure>
+
+<p>
+We see a variety of intricate fractals,
+ranging from snowflakes on the sides to a gauze-like pattern in the middle.
+It is so beautiful, in fact, that I set it as my phone wallpaper!
+</p>
+
+<p>
+We'll first discuss some basic properties of $\mathcal D$.
+</p>
+
+<div class="callout callout-result">
+<div class="callout-title">Proposition 2.</div>
+<ol>
+    <li>$\mathcal{D}$ is symmetric about the real axis, the imaginary axis and the unit circle, i.e.
+    $z = x + iy\in \mathcal{D}\iff x-iy\in \mathcal{D} \iff -x+iy\in \mathcal{D} \iff 1/z \in \mathcal{D}$.</li>
+
+    <li>$\mathcal{D} \subset \{z\in \mathbb C \mid 1/2 < |z| < 2\}$.</li>
+
+    <li>$\mathcal{D} \supset \{e^{2\pi iq} \mid q\in \mathbb Q\}$, the roots of unity.</li>
+</ol>
+</div>
+
+<div class="proof">
+    <p><i>Proof.</i></p>
+
+    <ol>
+        <li>
+            Suppose $z_0$ is a root of a Littlewood polynomial $\ell(z) = \sum_{n=0}^d a_n z^n$.
+            Since $\ell$ is a real polynomial, the complex conjugate $\bar z_0$
+            is also a root of $\ell$.
+            Moreover, $-z_0$ is a root of $\ell(-z) = \sum_{n=0}^d (-1)^n a_n z^n$
+            and $1/z_0$ is a root of $z^d \ell(1/z) = \sum_{n=0}^d a_{d-n} z^n$,
+            which are both Littlewood polynomials.
+        </li>
+
+        <li>
+            This is a consequence of the triangle inequality and the geometric sum.
+            If $|z|\leq 1/2$, then for any Littlewood polynomial $\ell(z) = \sum_{n=0}^{d} a_nz^n$,
+            $$ \begin{align*}
+                |\ell(z)| &= \left|a_0 + \sum_{n=1}^{d} a_n z^n\right| \geq |a_0| - \sum_{n=1}^{d} |a_n| |z|^n \\
+                &= 1 - \sum_{n=1}^{d} |z|^n = 1 - \frac{|z| - |z|^d}{1 - |z|} = \frac{1 - 2|z| + |z|^d}{1 - |z|}> 0,
+            \end{align*} $$
+            so $z\not\in \mathcal{D}$.
+            As $\mathcal D$ is symmetric about the unit circle,
+            $z\not\in \mathcal D$ if $|z| \geq 2$ as well.
+        </li>
+
+        <li>
+            $1$ is the root of $z-1$. $e^{2πik/n}$ (where $k,n\in \N$ are coprime and $n>1$) is a root of
+            $$ \begin{align*}
+            \frac{z^n - 1}{z - 1} = 1 + z + \ldots + z^{n-1},
+            \end{align*} $$
+            which is a Littlewood polynomial.
+        </li>
+    </ol>
+</div>
+
+<p>
+That is good and all, but I think when you saw the visualisation of $\mathcal D$,
+you were not wondering why these properties hold.
+Instead, your questions are probably:
+</p>
+
+<ol>
+    <li>Why do fractals appear when we plot roots of polynomials?
+    This was very surprising to me!</li>
+
+    <li>Why is there a "halo" around the unit circle,
+    by which I mean a high density of roots near the unit circle?
+    We already saw that $\mathcal D$ contains all roots of unity,
+    which are <dfn>dense</dfn> in the unit circle,
+    meaning any point on the unit circle can be approximated by roots of unity
+    to arbitrary precision.
+    Therefore visually, we see the whole of the unit circle in the diagram.
+    Does this happen in an area around the unit circle?</li>
+</ol>
+
+We will answer these two questions today.
+
+<h2>Dragon curves</h2>
+
+<p>
+If you know something about fractals and have a keen eye,
+you might notice the patterns we saw are called <dfn>dragon curves</dfn>.
+To understand what they are, we need a crash course in <dfn>iterated function systems</dfn>,
+a method of producing fractals.
+</p>
+
+<h3>Fractals</h3>
+
+<div class="callout callout-def">
+<div class="callout-title">Definition 3.</div>
+Say a function $f: \C \to \C$ is a <dfn>contraction mapping</dfn>
+if there exists a constant $0\leq L<1$ such that
+$$ \begin{align*}
+    |f(x) - f(y)| \leq L \cdot |x - y|, \qquad \text{for all } x,y\in \C.
+\end{align*} $$
+
+An <dfn>iterated function system</dfn> (IFS) is a finite set of contraction mappings.
+</div>
+
+<p>
+Dragon curves are parametrised by a complex number $z$.
+We consider the iterated function system
+$$ \begin{align*}
+    \mathcal{F}_z := \Big\{f_{z+}(w) = 1 + zw, \qquad f_{z-}(w) = -1 + zw\Big\}.
+\end{align*} $$
+These are complex scaling by $z$ and then translation by $\pm 1$.
+For them to be contraction mappings, distances need to shrink, so we require $|z|<1$.
+</p>
+
+<p>
+Here comes a general theorem about iterated function systems.
+Don't worry if the statement or the proof doesn't make sense &mdash;
+we'll see an example very soon!
+</p>
+
+<div class="callout callout-result">
+<div class="callout-title">Theorem 4 (Hutchinson 1981).</div>
+Let $\mathcal{F} = \set{f_1, f_2, \ldots, f_N}$ be an iterated function system.
+
+<p>
+There exists a unique non-empty compact (i.e. closed and bounded) set $A$
+(called the <dfn>attractor</dfn>)
+satisfying the self-similarity property
+$$ \begin{align*}
+    A = \bigcup_{n=1}^{N} f_n(A) \equiv \sb{f_n(x)}{n=1,\ldots,N, \; x\in A}.
+\end{align*} $$
+</p>
+
+<p>
+Moreover, $A$ is the attractor in the following sense:
+starting with an arbitrary non-empty compact set $S_0 \subset \C$
+and performing the iterative process
+$$ \begin{align*}
+S_{k+1} := \bigcup_{n=1}^{N} f_n(S_k), \qquad \text{for all } k\geq 0,
+\end{align*} $$
+we have
+$$ \begin{align*}
+    S_k \to A \qquad \text{as $k\to \infty$}
+\end{align*} $$
+in the so-called <dfn>Hausdorff metric</dfn>.
+<a href="#ref-5">[5]</a>
+</p>
+</div>
+
+<div class="proof">
+    <i>Proof sketch.</i>
+    Check that
+    $$ \begin{align*}
+        \mathrm{Com}(\C) = \set{\text{non-empty compact sets of $\C$}}
+    \end{align*} $$
+    equipped with the Hausdorff metric
+    $$ \begin{align*}
+        d_H(A, B) = \max\{\sup_{a\in A}\inf_{b\in B} |a - b|, \sup_{b\in B} \inf_{a\in A} |a-b|\})
+    \end{align*} $$
+    is a complete metric space, and
+    $$ \begin{align*}
+        T: \mathrm{Com}(\C) &\to \mathrm{Com}(\C) \\
+        S &\mapsto \bigcup_{n=1}^{N} f_n(S)
+    \end{align*} $$
+    is a contraction mapping.
+    Then apply the <a href="https://en.wikipedia.org/wiki/Banach_fixed-point_theorem">contraction mapping theorem</a>.
+</div>
+
+<p>
+We can produce the dragon curve with this theorem.
+Take an initial "seed" point $w=0$,
+and keep applying one of $f_{z+}$ or $f_{z-}$.
+Formally, define by recursion
+\begin{align*}
+    S_{z,0} :={}& \{0\}, \\
+    S_{z, k+1} :={}& f_{z+}(S_{z,k}) \cup f_{z-}(S_{z,k}) \\
+    ={}& (1 + z S_{z,k}) \cup (-1 + zS_{z,k}).
+\end{align*}
+(When I write arithmetic operation on sets, I mean doing it pointwise and forming a new set,
+e.g. $1 + zS_{z,k} \equiv \sb{1 + zw}{w\in S_{z,k}}$.)
+</p>
+
+<figure>
+    <img src="one-iterate.png" width="100%"></img>
+    <figcaption>
+        <b>Figure 3.</b>
+        Given $S_{z,k}$, we produce the next iterate $S_{z,k+1}$
+        by a complex multiplication by $z$, translations by $+1$ and $-1$,
+        and taking the union.
+        The origin in $S_{z,k}$ is marked with a green cross for a visual reference.
+    </figcaption>
+</figure>
+
+<figure>
+    <img src="many-iterates.svg" width="100%"></img>
+    <figcaption>
+        <b>Figure 4.</b>
+        The first few iterates $S_k = S_{z,k}$ with $z = -0.290 -0.613i$.
+        A point in $S_{k+1}$ is coloured red if it is in $1 + zS_{k}$,
+        or it is coloured cyan if it is in $-1 + zS_{k}$.
+    </figcaption>
+</figure>
+
+<p>
+In the limit, $S_{z, k} \to A(z)$ the attractor,
+which we will call the <dfn>dragon curve</dfn> associated with $z$.
+It is the unique non-empty compact set satisfying
+the self-similarity property
+$$ \begin{align*}
+    A(z) = (1 + zA(z)) \cup (-1 + zA(z)).
+\end{align*} $$
+</p>
+
+<h3>Relating to Littlewood polynomials</h3>
+
+How does composing the functions $f_{z+}$ and $f_{z-}$ actually look like?
+Let's compute some function compositions by hand.
+$$ \begin{align*}
+    f_{z+}(0) &= 1 \\
+    f_{z+} \circ f_{z+}(0) &= 1 + z \\
+    f_{z-} \circ f_{z+} \circ f_{z+}(0) &= -1 + z + z^2\\
+    f_{z+} \circ f_{z-} \circ f_{z+} \circ f_{z+}(0) &= 1 - z + z^2 + z^3
+\end{align*} $$
+We obtain Littlewood polynomials this way!
+More precisely, an $(k+1)$-fold composition of $f_{z+}$ and $f_{z-}$
+applied to the seed point $0$
+is a degree-$k$ Littlewood polynomial in $z$.
+Furthermore, the order we apply the functions uniquely determine the Littlewood polynomial
+(notice the signs on the left and on the right are the same).
+
+Therefore, the iterate $S_{z,k+1}$ are related to Littlewood polynomials by
+$$ \begin{align*}
+    S_{z,k+1} = \sb{\ell(z)}{\text{degree-$k$ Litlewood polynomial $\ell$}},
+\end{align*} $$
+and so chasing definitions,
+$$ \begin{align*}
+    \mathcal{D} = \sb{z\in \C}{0 \in S_{z,k} \text{ for some $k$}}.
+\end{align*} $$
+
+<h3>Heuristic argument</h3>
+<p>
+We've taken a glimpse at how dragon curves relate to roots of Littlewood polynomials.
+We now present a handwavy argument,
+due to <a href="https://www.gregegan.net/SCIENCE/Littlewood/Littlewood.html">Greg Egan</a>,
+to explain why $\mathcal D$ contains dragon curves.
+</p>
+
+<p>
+Recall that the iterate $S_{z, k+1}$ is the image of $z$ under all degree-$k$ Littlewood polynomials,
+and that $S_{z,k}$ converges to the attractor $A(z)$.
+Taking the limit as $k\to\infty$, roughly
+\begin{align*}
+    A(z) &\approx \{\ell(z) \mid \text{Littlewood polynomial $\ell$}\} \\
+\end{align*}
+so
+\begin{align*}
+    \mathcal D &\approx \{z \in \C \mid 0 \in A(z)\}.
+\end{align*}
+(We will make this more precise later.)
+</p>
+
+<figure>
+    <img src="heuristic1.png" width="100%">
+    <figcaption>
+        <b>Figure 5.</b>
+        Each $z\in \C$ on the left corresponds to
+        a dragon curve $A(z)$ on the right,
+        which is made by (loosely speaking) hitting $z$ with every Littlewood polynomial.
+        If $A(z)$ contains the origin $0$,
+        then (roughly) $z$ is a root of some Littlewood polynomial,
+        so $z \in \mathcal D$.
+    </figcaption>
+</figure>
+
+<p>
+Suppose $z_0\in \mathcal D$, so a zero of some Littlewood polynomial $\ell_0$.
+For the sake of argument, let's assume $\ell_0'(z_0) \neq 0$, meaning $z_0$ is a simple zero of $\ell_0$.
+If $\ell$ is a Littlewood polynomial that is "close" to $\ell_0$,
+we expect $\ell$ to have a root "close" to $z_0$.
+Taylor expanding about $z_0$ gives
+$$ \begin{align*}
+    \ell(z) \approx \ell(z_0) + (z - z_0) \,\ell'(z_0).
+\end{align*} $$
+Where is the root of $\ell$?
+Rearranging, $\ell(z) = 0$ whenever
+$$ \begin{align*}
+    z \approx z_0 - \frac{1}{\ell'(z_0)}\cdot \ell(z_0) \approx z_0 - \frac{1}{\ell_0'(z_0)}\cdot \ell(z_0),
+\end{align*} $$
+using the fact $\ell$ is "close" to $\ell_0$.
+Notice the root of $\ell$ is determined by an affine transformation of $\ell(z_0)$.
+</p>
+
+<figure>
+    <img src="heuristic2.png" width="100%">
+    <figcaption>
+        <b>Figure 6.</b>
+        If you "drag" the tip of the arrow labelled $\ell$ to the origin,
+        the parameter $z$ moves according to a linear transformation.
+    </figcaption>
+</figure>
+
+<p>
+Therefore about $z_0$,
+$$ \begin{align*}
+    \mathcal{D} &\supseteq \set{\text{zeros of Littlewood polynomial ``close'' to $\ell_0$}} \\
+    &\approx \sb{z_0 - \frac{1}{\ell_0'(z_0)} \cdot \ell(z_0)}{\text{Littlewood polynomial $\ell$ ``close'' to $\ell_0$}} \\
+    &\approx z_0 - \frac{1}{\ell_0'(z_0)} A(z_0),
+\end{align*} $$
+so $\mathcal D$ contains a scaled and translated copy of $A(z_0)$, which is a fractal!
+</p>
+
+<figure>
+    <img src="heuristic3.png" width="100%">
+    <figcaption>
+        <b>Figure 6.</b>
+        "Dragging" the tips of all such arrows to the origin
+        produces a scaled and translated copy of $A(z_0)$ in the $z$-space.
+        Thus $\mathcal D$ contains dragon curves.
+    </figcaption>
+</figure>
+
+<h3>Demonstration</h3>
+
+<p>
+Let's see the relationship between Littlewood polynomials and dragon curves in action.
+In the demo below (or click <a href="dragon/">here</a>), choose a point $z$ on the top panel.
+The lower left panel is the set $\mathcal D$, zoomed in near $z$.
+In the lower right panel, the dragon curve $A(z)$ associated with $z$ is plotted.
+</p>
+
+<p>
+Try moving around $z$, and you'll notice the pattern of $\mathcal D$ near $z$
+is similar to the dragon curve $A(z)$!
+</p>
+
+<iframe src="dragon/" width="100%" height="800px"></iframe>
+
+<p>
+This is pretty cool, but the argument I gave was quite wishy-washy.
+To redeem myself, we'll answer our second question with
+some rigorous analysis, and you'll be able to see how
+this correspondence between roots of Littlewood polynomials and dragon curves can help with proofs.
+</p>
+
+<h2>Density of roots</h2>
+
+Our second question was: why is there a "halo" around the unit circle?
+In 1988 as part of his PhD thesis, Thierry Bousch <a href="#ref-6">[6]</a>
+proved the following theorem:
+
+<div class="callout callout-result">
+<div class="callout-title">Theorem 5.</div>
+$$ \begin{align*}
+    \sb{z\in \C}{2^{-1/4} \leq |z| \leq 2^{1/4}} \subset \overline{\mathcal{D}}.
+\end{align*} $$
+</div>
+
+<p>
+Here, $\overline{\mathcal D}$ denotes the <a href="https://en.wikipedia.org/wiki/Closure_(topology)">closure</a>
+of $\mathcal D$, meaning the set of all limits of convergent sequences in $\mathcal D$.
+Intuitively, $\overline{\mathcal D}$ fills in all the "gaps" in $\mathcal D$.
+(Theorem 5 is clearly false if you replace $\overline{\mathcal D}$ with $\mathcal D$ &mdash;
+the annulus is an uncountable set
+while $\mathcal D$ consists only of <a href="https://en.wikipedia.org/wiki/Algebraic_number">algebraic numbers</a>
+so must be countable!)
+</p>
+
+<p>
+This theorem tells us not only does $\overline{\mathcal D}$
+contain the unit circle (as we've shown back in Proposition 2),
+but it contains an annulus surrounding the unit circle.
+Thus when we plot $\mathcal D$,
+dense points can be seen in a neighbourhood of the unit circle,
+which explains the "halo".
+</p>
+
+<p>
+Here is the game plan to prove Theorem 5!
+We'll follow Bousch's proof.
+</p>
+
+<ol>
+    <li>Firstly, we shall make the relationship between $\mathcal D$ and dragon curves more precise.
+    By doing some analysis, we'll arrive at
+
+    <div class="callout callout-result">
+    <div class="callout-title">Proposition 10.</div>
+    $\overline{\mathcal D} \cap B_1(0) = \sb{z\in B_1(0)}{0 \in A(z)}.$
     </div>
 
-    <div class="bottom">
-        <div class="canvas-block">
-            <div id="canvas2" class="canvas-container"></div>
-            <div class="caption">D</div>
-        </div>
+    which allows us to translate our problem about Littlewood polynomials
+    into a problem about dragon curves.
+    (I write $B_r(a) \equiv \sb{z\in \C}{|z - a| < r}$ for open balls
+    and $B_r[a] \equiv \sb{z\in \C}{|z - a| \leq r}$ for closed balls.)
+    </li>
 
-        <div class="canvas-block">
-            <div id="canvas3" class="canvas-container"></div>
-            <div class="caption">A(z)</div>
-        </div>
+    <li>Next, we look into the geometry of dragon curves.
+    We will show
+    <div class="callout callout-result">
+    <div class="callout-title">Lemma 12.</div>
+    If $2^{-1/2} < |z| < 1$, then $A(z)$ is connected.
     </div>
+    </li>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
-    <script src="main.js"></script>
+    <li>Finally, we'll relate the connectedness of $A(z)$ to whether $0\in A(z)$.
+    <div class="callout callout-result">
+        <div class="callout-title">Lemma 14.</div>
+        For $|z| < 1$,
+        if $A(z^2)$ is connected, then $0\in A(z)$.
+    </div>
+    </li>
+</ol>
 
+<p>
+Theorem 5 can then be derived from these results as follows.
+</p>
+
+<div class="proof">
+<i>Proof of Theorem 5.</i>
+If $2^{-1/4} < |z| < 1$,
+then $2^{-1/2} < |z^2| < 1$,
+so $A(z^2)$ is connected by Lemma 12.
+By Lemma 14, $0\in A(z)$,
+so by Proposition 10, $z\in \overline{\mathcal{D}}$.
+If $1 < |z| < 2^{1/4}$, we showed in Proposition 2
+that because $1/z\in \overline{\mathcal D}$, so is $z$.
+</div>
+
+
+<h3>Littlewood series and its topology</h3>
+<p>
+Instead of Littlewood polynomials, we need to consider Littlewood series.
+</p>
+
+<div class="callout callout-def">
+<div class="callout-title">Definition 6.</div>
+A <dfn>Littlewood series</dfn> is an infinite series with coefficients $+1$ or $-1$, i.e.
+a series of the form
+\begin{align*}
+    \sum_{n=0}^\infty a_n z^n, \qquad a_n\in \{+1, -1\}.
+\end{align*}
+</div>
+
+<p>
+Notice every Littlewood series has a radius of convergence of $1$,
+so defines an analytic function $B_1(0) \to \C$.
+</p>
+
+<p>
+We now discuss the topology of Littlewood polynomials and series,
+meaning when two such functions are "close together".
+</p>
+
+<div class="callout callout-result">
+<div class="callout-title">Lemma 7.</div>
+Fix some $0 < r < 1$.
+For all $ε > 0$, there exists $N\in \N$ such that
+for any two series $f(z) = \sum_{n=0}^{\infty} a_n z^n, g(z) = \sum_{n=0}^{\infty} b_n z^n$ satisfying
+<ol>
+    <li>$|a_n|, |b_n| \leq 1$ (so $f,g$ can be Littlewood polynomials or series); and</li>
+    <li>$a_n = b_n$ for all $n < N$,</li>
+</ol>
+we have a bound
+$$ \begin{align*}
+    |f(z) - g(z)| < ε \qquad \text{if }|z|\leq r.
+\end{align*} $$
+</div>
+
+<p>
+<i>Remark.</i>
+We can rephrase the lemma in more sophisticated terms:
+for each $0 < r < 1$,
+there is a uniformly continuous function, from
+the space $\{+1, -1\}^{\Z_{\geq 0}}$ of sequences of $\{+1, -1\}$
+(with the <a href="https://en.wikipedia.org/wiki/Product_topology">product topology</a>), to
+the space $C(B_r[0])$ of continuous functions $B_r[0] \to \C$
+(with the <a href="https://en.wikipedia.org/wiki/Uniform_norm">sup norm</a>),
+defined by
+$$ \begin{align*}
+    \set{+1, -1}^{\Z_{\geq 0}} &\to C(B_r[0]) \\
+    (a_n)_{n\geq 0} &\mapsto \left(z \mapsto \sum_{n=0}^{\infty} a_n z^n\right).
+\end{align*} $$
+It might be worth noting that $\set{+1, -1}^{\Z_{\geq 0}}$
+is homeomorphic to the <a href="https://en.wikipedia.org/wiki/Cantor_set">Cantor set</a>,
+which is compact and metrizable.
+</p>
+
+<div class="proof">
+<i>Proof.</i>
+Triangle inequality and geometric series come in handy again!
+If $|z| \leq r$, then
+$$ \begin{align*}
+    |f(z) - g(z)| &= \left|\sum_{n=N}^{\infty} (a_n - b_n) z^n\right|
+    \leq \sum_{n=N}^\infty (|a_n| + |b_n|) |z|^n \\
+    &\leq \sum_{n=N}^{\infty} 2r^n
+    = \frac{2r^{N}}{1 - r} < ε
+\end{align*} $$
+for some sufficiently large $N$.
+</div>
+
+<p>
+This reveals that two Littlewood polynomials or series that
+agree on the first few terms are "close together".
+</p>
+
+<p>
+The above lemma allows us to show that "close" Littlewood polynomials and series
+have roots that are "close together".
+</p>
+
+<div class="callout callout-result">
+<div class="callout-title">Lemma 8.</div>
+Let $z_0 \in B_1(0)$ be a root of
+$f(z) = \sum_{n=0}^\infty a_n z^n$ with $|a_n| \leq 1$.
+For any $\delta>0$,
+there exists $N\in \N$ such that
+if $g(z) = \sum_{n=0}^\infty b_n z^n$ is another series with
+<ol>
+    <li>$|b_n| \leq 1$; and
+    <li>$a_n = b_n$ for all $n < N$,</li>
+</ol>
+then $g$ has a root in $B_\delta(z_0)$.
+</div>
+
+<div class="proof">
+<p><i>Proof.</i>
+By the principle of isolated zeros, $f$ has finitely many roots in any compact set in $B_1(0)$.
+Therefore by shrinking $\delta$, without loss of generality
+assume $B_\delta[z_0] \subseteq B_1(0)$ and $f$ does not have any roots on $\partial B_\delta[z_0] \equiv \sb{w\in \C}{|w - z_0| = \epsilon}$.
+</p>
+
+<p>
+By the compactness of $\partial B_\delta[z_0]$,
+take $\epsilon := \inf \sb{|f(z)|}{z \in \partial B_{\delta}[z_0]} > 0$.
+Moreover pick some $|z_0| + \delta < r < 1$.
+</p>
+
+<p>
+Apply Lemma 7 with the above $r$ and $\epsilon$ to obtain $N\in \N$.
+Then for any $g(z) = \sum_{n=0}^\infty b_n z^n$ with $|b_n| \leq 1$ and $a_n = b_n$ for all $n < N$,
+we have
+$$
+    |f(z) - g(z)| < \epsilon \leq |f(z)| \qquad \text{for all } z\in \partial B_\delta[z_0].
+$$
+</p>
+
+<p>
+Now we apply <a href="https://en.wikipedia.org/wiki/Rouch%C3%A9's_theorem">Rouche&#769;'s theorem</a>!
+Because $f$ and $g$ are analytic functions on $B_\delta[z_0]$, it tells us
+that the number of roots of $g$ in $B_\delta(z_0)$ equals that of $f$, which is at least one.
+</p>
+</div>
+
+<h3>Connection between $\overline{\mathcal D}$ and $A(z)$</h3>
+Now that we have the language of Littlewood series,
+we can finally formulate the relationship between Littlewood polynomials and dragon curves precisely.
+
+<div class="callout callout-result">
+<div class="callout-title">Proposition 9.</div>
+For $|z_0| < 1$,
+$$ A(z_0) = \sb{f(z_0)}{\text{Littlewood series $f$}}. $$
+</div>
+
+<div class="proof">
+<i>Proof.</i>
+<ul>
+    <li>
+        <p>
+        $\supseteq$.
+        Let $f(z) = \sum_{n=0}^\infty a_n z^n$ be a Littlewood series and $f(z_0) = w$.
+        Recall that the dragon curve $A(z_0)$ is the limit of the sequence
+        \begin{align*}
+            S_{z_0,k+1} = \sb{\ell(z_0)}{\text{degree-$k$ Littlewood polynomial $\ell$}}.
+        \end{align*}
+        It suffices (by the definition of the Hausdorff metric)
+        to find a sequence $(w_k)_{k\geq 0}$
+        such that $w_k\in S_{z_0,k}$ and $w_k\to w$.
+        Taking the truncated series
+        $$
+            w_k := \sum_{n=0}^{k-1} a_n z_0^n
+        $$
+        works.
+        </p>
+    </li>
+
+    <li>
+        <p>
+        $\subseteq$.
+        Suppose $w\in A(z_0)$.
+        We construct a Littlewood series $f(z) = \sum_{n=0}^\infty a_n z^n$ recursively as follows:
+        start by taking $w_0 := w$.
+        Given $w_n \in A(z_0)$,
+        recall $A(z_0)$ satisfies the self-similarity property
+        $$ A(z_0) = (1 + z_0 A(z_0)) \cup (-1 + z_0 A(z_0)), $$
+        so take $a_n\in \{+1, -1\}$ and $w_{n+1}\in A(z_0)$ such that $w_n = a_n + z_0 w_{n+1}$.
+        Repeat to obtain $(a_n)_{n\geq 0}$ such that
+        $$ w - z_0^N w_N = \sum_{n=0}^{N-1} a_n z_0^n. $$
+        </p>
+
+        <p>
+        Since $A(z_0)$ is bounded and $|z_0| < 1$,
+        we have $z_0^N w_N \to 0$ as $N\to\infty$.
+        Therefore $f(z_0) = \sum_{n=0}^\infty a_n z_0^n = w$.
+        </p>
+    </li>
+</ul>
+</div>
+
+<div class="callout callout-result">
+<div class="callout-title">Proposition 10.</div>
+$$ \overline{\mathcal D} \cap B_1(0) = \sb{z\in B_1(0)}{0 \in A(z)}. $$
+</div>
+
+<p>
+This is the key result that allows us to translate problems about $\mathcal D$
+into problems about $A(z)$.
+</p>
+
+<div class="proof">
+<p><i>Proof.</i>
+By Proposition 9, it suffices to show that for $|z_0| < 1$,
+$z_0 \in \overline{\mathcal D}$ if and only if $z_0$ is a root of some Littlewood series.
+</p>
+
+<ul>
+    <li>
+        <p>
+        $\Leftarrow$.
+        If $z_0$ is a root of a Littlewood series $f(z) = \sum_{n=0}^\infty a_n z_0^n$,
+        consider the truncated series
+        $$ \ell_k(z) := \sum_{n=0}^{k-1} a_n z^n. $$
+        </p>
+
+        <p>
+        For each $\delta>0$, by Lemma 8,
+        there is some $N\in \N$ such that the Littlewood polynomial $\ell_N$
+        has a root $z_N$ with $|z_N - z_0| < \delta$.
+        These $z_N \in \mathcal D$ form a sequence that converges to $z_0$,
+        so $z_0 \in \overline{\mathcal D}$.
+        </p>
+    </li>
+
+    <li>
+        <p>
+        $\Rightarrow$.
+        If $z_0\in \mathcal D$,
+        say a root of a Littlewood polynomial $\ell(z) = \sum_{n=0}^{N-1} a_n z^n$,
+        then $z_0$ is also a root of the Littlewood series
+        \begin{align*}
+        f(z) :={}& (1 + z^{N} + z^{2N} + \ldots)\cdot \ell(z) \\
+        ={}& (a_0 + \ldots + a_{N-1}z^{N-1}) + (a_0 z^N + \ldots + z_{N-1} z^{2N-1}) + \ldots.
+        \end{align*}
+        </p>
+
+        <p>
+        Otherwise, $z_0$ is a limit point of $\mathcal D$,
+        meaning there is a sequence of distinct points $(z_k)_{k\geq 0}$ in $\mathcal D$
+        such that $z_k \to z_0$.
+        Suppose each $z_k$ is a root of a Littlewood polynomial $\ell_k(z) = \sum_{n=0}^{\infty} a_{k, n} z^n$ (where $a_{k,n}\in \{-1, 0, +1\})$.
+        We want to find a Littlewood series $f(z) = \sum_{n=0}^{\infty} a_{\infty, n}z^n$
+        such that $f(z_0) = 0$.
+        Perform a diagonal extraction:
+        </p>
+
+        <ol>
+            <li>Among $(a_{k,0})_{k\geq 0}$, either infinitely many are $-1$ or infinitely many are $+1$.
+            Extract a subsequence $ϕ_0(0) < ϕ_0(1) < \ldots$ such that $(a_{ϕ_0(k), 0})_{k\geq 0}$ is constant, say equal $a_{\infty, 0}$.</li>
+
+            <li>Among $(a_{ϕ_0(k), 1})_{k\geq 0}$, either infinitely many are $-1$ or infinitely many are $+1$.
+            Extract a sub-subsequence $ϕ_1(0) < ϕ_1(1) < \ldots$ such that $(a_{ϕ_1(k), 1})_{k\geq 0}$ is constant, say equal $a_{\infty, 1}$.</li>
+
+            <li>Considering $(a_{ϕ_1(k), 2})_{k\geq 0}$,
+            extract a sub-sub-subsequence $ϕ_2(0) < ϕ_2(1) < \ldots$ such that $(a_{ϕ_2(k), 2})_{k\geq 0}$ is constant, say equal $a_{\infty, 2}$.</li>
+        </ol>
+
+        <p>
+        Repeat to obtain $(a_{\infty, n})_{n\geq 0}$,
+        and define $ϕ(k) := ϕ_k(k)$ and $f(z) := \sum_{n=0}^{\infty} a_{\infty, n} z^n$.
+        </p>
+
+        <p>
+        For each $k\geq 0$, note that $f$ and $\ell_{ϕ(k)}$ agree in the first $(k+1)$ terms,
+        so by Lemma 7, $\ell_{ϕ(k)}\to f$ uniformly in $B_{r}[0]$,
+        choosing $r := \sup_k |z_k| < 1$.
+        Thus
+        $$ \begin{align*}
+            |f(z_0)| ={}& |f(z_0) - \ell_{ϕ(k)}(z_{ϕ(k)})| \\
+            \leq{}& \underbrace{|f(z_0) - f(z_{\phi(k)})|}_{\to 0 \text{ by continuity}} + \underbrace{|f(z_{ϕ(k)}) - \ell_{ϕ(k)}(z_{ϕ(k)})|}_{\to 0 \text{ by uniform convergence}} \\
+            \to{}& 0,
+        \end{align*} $$
+        and hence $f(z_0) = 0$.
+        </p>
+    </li>
+</ul>
+</div>
+
+<p>
+<i>Remark.</i>
+In the proof of $\Rightarrow$, we basically showed
+the sequence space $\{+1, -1\}^{\Z_{\geq 0}}$ is compact,
+which is a consequence of <a href="https://en.wikipedia.org/wiki/Tychonoff's_theorem">Tychonoff's theorem</a>!
+</p>
+
+<h3>Connectedness of dragon curves</h3>
+
+<figure>
+    <img src="connected.svg" width="100%"></img>
+    <figcaption>
+        <b>Figure 7.</b>
+        Examples of connectedness of dragon curves.
+    </figcaption>
+</figure>
+
+<p>
+We've done enough analysis to turn our problem about Littlewood polynomials
+into a problem about dragon curves.
+Let's now take a change in direction and do some point-set topology
+by studying the geometry of dragon curves.
+We will use the defining feature of the dragon curve $A(z)$ multiple times,
+which is the self-similarity property
+$$ A(z) = (1 + zA(z)) \cup (-1 + zA(z)). $$
+</p>
+
+<p>
+First, let's provide some useful characterisations of
+when $A(z)$ is connected.
+</p>
+
+<div class="callout callout-result">
+<div class="callout-title">Lemma 11.</div>
+Assume $|z| < 1$.
+The following are equivalent:
+
+<ol>
+    <li>$A(z)$ is <a href="https://en.wikipedia.org/wiki/Connected_space#Definition">connected</a>.</li>
+    <li>$A(z)$ is <a href="https://en.wikipedia.org/wiki/Connected_space#Path_connectedness">path-connected</a>.</li>
+    <li>$(1 + zA(z)) \cap (-1 + zA(z)) \neq \emptyset$.</li>
+</ol>
+</div>
+
+<div class="proof">
+<i>Proof.</i>
+<ul>
+    <li>$2\Rightarrow 1$ is a <a href="https://en.wikipedia.org/wiki/Connected_space#Theorems">general statement</a>.</li>
+
+    <li>$1\Rightarrow 2$: Omitted. Refer to Kigami 1.6.2 <a href="#ref-7">[7]</a>.</li>
+
+    <li>$1\Rightarrow 3$: If $A(z)$ is connected,
+    then $A(z)$ cannot be a union of two disjoint closed sets.
+    $\pm 1 + zA(z)$ are compact (hence closed) subsets of $A(z)$ and cover $A(z)$,
+    so they must intersect.
+
+    <li>
+        <p>
+        $3 \Rightarrow 1$. We say a set $A\subseteq \C$ is <dfn>$t$-chain connected</dfn> (for $t > 0$)
+        if for all $x,y\in S$, there exists a finite sequence (<dfn>chain</dfn>) $x = x_0, x_1, \ldots, x_{n-1}, x_n = y\in S$
+        such that $|x_i - x_{i-1}| < t$ for all $i$.
+        </p>
+
+        <p>
+        $A(z)$ is bounded, so it is $(\sup \sb{|x-y|}{x,y\in A(z)})$-chain connected.
+        If $A(z)$ is $t$-chain connected, then $\pm 1 + zA(z)$ is $|z|t$-chain connected
+        by scaling the chain.
+        Since $(1 + zA(z)) \cap (-1 + zA(z)) \neq \emptyset$,
+        by combining two chains together,
+        $A(z) = (1 + zA(z)) \cup (-1 + zA(z))$ is also $|z|t$-chain connected.
+        Since $|z|<1$, repeat to show $A(z)$ is $ε$-chain connected for all $ε>0$.
+        </p>
+
+        <p>
+        If $A(z)$ is a union of two disjoint closed sets $B, C$,
+        since $A(z)$ is compact, so are $B$ and $C$,
+        so $\epsilon := \inf\sb{|b - c|}{b\in B, c\in C} > 0$.
+        Then $A(z)$ cannot be $\epsilon$-chain connected, which is a contradiction.
+        Hence $A(z)$ must be connected.
+        </p>
+    </li>
+</ul>
+</div>
+
+<p>
+<i>Remark.</i>
+I've included the path-connected characterisation to simplify proofs,
+but in fact we can avoid using it in the upcoming proofs. 
+See if you can spot how!
+</p>
+
+<p>
+<i>Remark.</i>
+In fact, there is a dichotomy of the connectedness of
+the attractor of any iterated function system with two maps:
+either the attractor is connected,
+or it is <a href="https://en.wikipedia.org/wiki/Totally_disconnected_space">totally disconnected</a>.
+<a href="#ref-8">[8]</a>
+</p>
+
+<p>
+Next, we'll provide a sufficient condition for the connectedness of $A(z)$.
+</p>
+
+<div class="callout callout-result">
+<div class="callout-title">Lemma 12.</div>
+If $2^{-1/2} < |z| < 1$, then $A(z)$ is connected.
+</div>
+
+<div class="proof">
+<p><i>Proof.</i>
+By Lemma 11, it suffices to show $(1 + zA(z)) \cap (-1 + zA(z)) \neq \emptyset$.
+For a set $A \subseteq \C$ and $ε>0$, write $A^ε$ for its $ε$-extension
+$$ \begin{align*}
+    A^ε := A + B_ε(0) \equiv \sb{z\in \C}{\exists a\in A: |z - a| < ε}.
+\end{align*} $$
+</p>
+
+<p>
+Because $f_{z\pm} : w \mapsto \pm 1 + zw$ are contraction mappings,
+$\pm 1 + z A(z) \subseteq A(z)$ implies
+$$ \pm 1 + z(A(z)^ε) \subseteq A(z)^ε, $$
+so
+$$ \begin{align*}
+    (1 + zA(z)^ε) \cup (-1 + zA(z)^ε) \subseteq A(z)^ε.
+\end{align*} $$
+</p>
+
+<p>
+One way of showing a set is non-empty is to show it has strictly positive area!
+Let $μ$ be the <a href="https://en.wikipedia.org/wiki/Lebesgue_measure">Lebesgue measure</a>,
+which measures the area of a set.
+Since $A(z)$ is non-empty,
+$A(z)^\epsilon$ contains a ball of radius $\epsilon$, so
+$$ \begin{align*}
+    μ(A(z)) \geq πε^2 > 0.
+\end{align*} $$
+Moreover area is invariant under translation,
+and scaling a set by a factor of $\lambda$ multiplies its area by $\lambda^2$.
+Therefore
+$$ \begin{align*}
+    μ(\pm 1 + zA(z)^ε) = μ(z A(z)^ε) = |z|^2 μ(A(z)^ε).
+\end{align*} $$
+Thus the inclusion-exclusion principle yields
+$$ \begin{align*}
+    & μ\bigl((1+zA(z)^ε) \cap (-1+zA(z)^ε)\bigr) \\
+    ={}& μ\bigl(1 + zA(z)^ε\bigr) + μ\bigl(-1 + zA(z)^ε\bigr) - μ\bigl((1 + zA(z)^ε) \cup (-1 + zA(z)^ε)\bigr) \\ 
+    \geq{} & 2|z|^2 μ(A(z)^ε) - μ(A(z)^ε) \\
+    ={}& (2|z|^2 - 1) \, μ(A(z)^ε) > 0,
+\end{align*} $$
+which follows from the condition $|z| > 2^{-1/2}$.
+Hence
+$$ \begin{align*}
+    (1 + zA(z)^ε) \cap (-1 + zA(z)^ε) \neq \emptyset.
+\end{align*} $$
+</p>
+
+To conclude, 
+for each $ε = 1/n$, pick $x_n \in (1 + zA(z)^ε) \cap (-1 + zA(z)^ε)$.
+By compactness, the limit of a convergent subsequence of $(x_n)$ lies in $(1 + zA(z)) \cap (-1 + zA(z))$.
+</div>
+
+<h3>The last puzzle piece</h3>
+<p>
+Finally, we'll relate the connectedness of dragon curves to $\mathcal D$.
+Before we prove Lemma 14,
+we need an auxiliary result about "holes" in dragon curves.
+</p>
+
+<div class="callout callout-result">
+<div class="callout-title">Lemma 13.</div>
+Assume $|z| < 1$, $A(z)$ is connected and $0\not\in A(z)$.
+Then the complement $\C \setminus A(z)$ has (at least) two
+<a href="https://en.wikipedia.org/wiki/Connected_space#Connected_components">connected components</a>:
+<ol>
+    <li>a unique unbounded connected component $U_z$; and</li>
+    <li>a bounded connected component $V_z$ containing $0$, called the <dfn>ventre</dfn> or <dfn>belly</dfn>.</li>
+</ol>
+</div>
+
+<div class="proof">
+<p>
+<i>Proof.</i>
+$\C \setminus B_{r'}[0]\subseteq \C\setminus A(z)$ where $r' := \max\sb{|w|}{w\in A(z)}$,
+so $\C\setminus B_{r'}[0]$ lies in a unique unbounded connected component $U_z$ of $\C \setminus A(z)$.
+</p>
+
+<p>
+By Lemma 11, $A(z)$ is path-connected.
+Picking any $x\in A(z)$, since $-x\in A(z)$,
+find a path $γ$ in $A(z)$ from $x$ to $-x$.
+Then the concatenation $γ \cdot -γ$ is a closed curve based at $x$
+with an odd (hence non-zero) <a href="https://en.wikipedia.org/wiki/Winding_number">winding number</a> around $0$.
+Note the function sending $w\in \C \setminus A(z)$
+to the winding number of $γ \cdot -γ$ around $w$
+is constant on connected components of $\C \setminus A(z)$
+and is zero on $U_z$.
+Therefore $0$ does not lie in $U_z$,
+so $0$ lies in a bounded component $V_z$ of $\C\setminus A(z)$.
+</p>
+</div>
+
+Now we will prove our final result:
+
+<div class="callout callout-result">
+    <div class="callout-title">Lemma 14.</div>
+    For $|z| < 1$,
+    if $A(z^2)$ is connected, then $0\in A(z)$.
+</div>
+
+<div class="proof">
+<p><i>Proof.</i>
+By Proposition 9,
+the dragon curve is the image of $z$ under all Littlewood series
+$$ \begin{align*}
+    A(z) = \sb{\sum_{n=0}^\infty a_n z^n}{a_n\in \{+1, -1\}}.
+\end{align*} $$
+Observe
+<ol>
+    <li>$A(z)$ is symmetric, i.e. $w\in A(z)$ if and only if $-w\in A(z)$, by flipping the signs in a Littlewood series; and
+    <li>by splitting into even and odd terms,
+        $A(z) = \sb{\sum_{n=0}^\infty b_n (z^2)^n}{b_n\in \{+1, -1\}} + \sb{z\cdot \sum_{n=0}^\infty c_n (z^2)^n}{c_n\in \{+1, -1\}} = A(z^2) + zA(z^2)$.</li>
+</ol>
+</p>
+
+<p>
+Suppose for a contradiction $A(z^2)$ is connected but $0\not\in A(z) = A(z^2) + zA(z^2)$.
+We now make a series of claims.
+</p>
+
+<p>
+<b>Claim 1.</b> $A(z^2) \cap zA(z^2) = \emptyset$.
+</p>
+
+<p class="subproof">
+<i>Proof of claim.</i>
+If not, say $α\in A(z^2) \cap zA(z^2)$,
+then $-α\in A(z^2)$ by symmetry,
+so $0 = (-α) + α\in A(z^2) + zA(z^2)$, contradiction.
+</p>
+
+<p>
+<b>Claim 2.</b>
+$A(z^2)\subseteq zU_{z^2}$, the unbounded component of $\C \setminus zA(z^2)$.
+</p>
+
+<p class="subproof">
+<i>Proof of claim.</i>
+Let $x\in A(z^2)$ be with maximal $|x|$.
+Then $\C \setminus B_{|x|}[0] \subseteq U_{z^2}$.
+Since $|z| < 1$,
+$|x| > |z||x|$ so
+$x \in \C \setminus B_{|z||x|}[0] \subseteq zU_{z^2}$.
+As $A(z^2)$ is connected, $A(z^2) \subseteq zU_{z^2}$.
+</p>
+
+<p>
+<b>Claim 3.</b>
+$z^2A(z^2)\subseteq zV_{z^2}$, the belly of $zA(z^2)$.
+</p>
+
+<p class="subproof">
+<i>Proof of claim.</i>
+Let $x\in A(z^2)$ be with minimal $|x|$.
+Then $B_{|x|}(0) \subseteq V_{z^2}$.
+$z^2 x\in z^2 A(z^2)$ satisfies $|z^2 x| < |z| |x|$ so $z^2x\in B_{|z||x|}(0)\subseteq zV_{z^2}$.
+As $z^2 A(z^2)$ is connected, $z^2 A(z^2) \subseteq zV_{z^2}$.
+</p>
+
+<p>
+Because $z^2 A(z^2)$ and $A(z^2)$ lie in different components of $\C \setminus zA(z^2)$,
+we obtain
+$$ \begin{align*}
+    \emptyset = z^2 A(z^2) \cap A(z^2) = L \cap \bigl((1 + L) \cup (-1 + L)\bigr)
+\end{align*} $$
+where $L := z^2 A(z^2)$, using the self-similarity property $A(z^2) = (1 + z^2 A(z^2)) \cup (-1 + z^2A(z^2))$.
+Meanwhile, because $A(z^2)$ is connected, Lemma 11 says
+$$
+    (1 + L) \cap (-1 + L) \neq \emptyset.
+$$
+We will now show that these two statements lead to a contradiction.
+</p>
+
+<p>
+Because $L$ is compact,
+find $x, y\in L$ such that $\Im x$ is maximal and $\Im y$ is minimal.
+Then $L\subseteq \sb{z\in \C}{\Im x \leq \Im z \leq \Im y}$.
+$L$ is path-connected by Lemma 11,
+so there is a path $\gamma$ in $L$ from $x$ to $y$.
+</p>
+
+<p>
+Moreover $(1 + L) \cap (-1 + L) \neq \emptyset$, so $(1 + L) \cup (-1 + L)$ is path-connected.
+Note $1+x, -1 + y \in (1 + L) \cup (-1 + L)$, so
+there is a path $μ$ in $(1 + L) \cup (-1 + L)$ from $1+x$ to $-1+y$.
+$\gamma$ and $\mu$ must intersect (otherwise we can produce a <a href="https://en.wikipedia.org/wiki/Kuratowski's_theorem">planar embedding of $K_5$</a>),
+showing $L \cap ((1 + L) \cup (-1 + L))\neq \emptyset$.
+</p>
+
+</div>
+
+<figure>
+    <img src="wedging.svg" width="100%">
+    <figcaption>
+        <b>Figure 8.</b>
+        If $L\subset \C$ is a path-connected non-empty compact set
+        such that $(1 + L) \cap (-1 + L) \neq \emptyset$,
+        then $L \cap ((1 + L) \cup (-1 + L)) \neq \emptyset$.
+    </figcaption>
+</figure>
+
+<h2>Final words</h2>
+
+<figure>
+    <img src="full-24.png" width="100%"></img>
+    <figcaption>
+        <b>Figure 9.</b>
+        Roots of all Littlewood polynomials of degree 24.
+        Made by Sam Derbyshire.
+    </figcaption>
+</figure>
+
+<p>
+Here are a few questions and tangents related to $\mathcal D$.
+</p>
+
+<ol>
+    <li>
+        In visualisations of roots of Littlewood polynomials of a finite degree $d$,
+        there are often holes on the unit circle.
+        The most apparent ones are centred at $+1$ and $-1$,
+        and there are smaller ones near the other roots of unity.
+        Why do they exist, and how do they shrink as $d\to \infty$?
+        If you're interested, see the discussion in <a href="#ref-2">[2]</a>.
+    </li>
+
+    <li>
+        Is the constant $2^{-1/4}$ tight in Theorem 5,
+        i.e. is there a smaller radius $r$ such that $\sb{z\in \C}{r \leq |z| \leq r^{-1}} \subseteq \overline{\mathcal D}$?
+        I don't know the answer to this &mdash;
+        let me know if you figure something out!
+    </li>
+
+    <li>
+        <p>
+        Instead of $\{+1, -1\}$,
+        what if we consider a different set of possible values of polynomial coefficients?
+        </p>
+
+        <p>
+        Polynomials with coefficients $\{0, 1\}$
+        were studied by Odlyzko and Poonen in 1993 <a href="#ref-9">[9]</a>,
+        which provided useful techniques for future work to build on.
+        For coefficients in $\{+1, 0, -1\}$,
+        it can be shown using the characterisation in Lemma 11 that
+        $$ \begin{align*}
+            &\sb{z\in B_1(0)}{\text{$A(z)$ is connected}} \\
+            =&{} \sb{z\in B_1(0)}{\sum_{n=0}^\infty a_n z^n = 0 \text{ for some } a_n\in \{+1, 0, -1\}},
+        \end{align*} $$
+        which is denoted $\mathcal M$. <a href="#ref-6">[6]</a>
+        In 2014, Calegari, Koch, and Walker <a href="#ref-10">[10]</a>
+        showed that
+        the interior of $\mathcal M$ is almost dense, in the sense
+        $$ \mathcal M = \overline{\op{int}\mathcal M} \cup (\mathcal M \cap \R), $$
+        (which is known as Bandt's conjecture),
+        and that $\mathcal M$ has infinitely many holes.
+        </p>
+    </li>
+
+    <li>
+        Bousch also showed that $\mathcal M_0 := \sb{z\in B_1(0)}{0 \in A(z)}$ and $\mathcal M$ are connected and locally connected.
+        Connectedness of fractals is an active research area
+        <a href="#ref-11">[11]</a>;
+        for example, whether the Mandelbrot set is locally connected
+        is still an open problem.
+    </li>
+</ol>
+
+<p>
+The premise of this article was quite simple:
+explain phenomena about roots of polynomials with restricted coefficients.
+Before I started looking into the literature,
+I certainly didn't expect to go on a fascinating journey through
+dynamical systems, analysis and topology!
+I hope you'll agree that not only is the picture of roots of Littlewood polynomials beautiful,
+but so is the connection between the polynomials and dragon curves.
+</p>
+
+<p>
+<i>
+For discussion or correction,
+feel free to create an issue on the <a href="https://github.com/KeroppiMomo/littlewood/">GitHub repository</a>
+or email me!
+</i>
+</p>
+
+<h2>References</h2>
+<ol>
+    <li id="ref-1">J.D. Christensen. (2006) Plots of Roots of Polynomials with Integer Coefficients. URL: <a href="http://jdc.math.uwo.ca/roots/">http://jdc.math.uwo.ca/roots/</a>.</li>
+    <li id="ref-2">J. Baez. (2011) The beauty of roots. Azimuth. URL: <a href="https://johncarlosbaez.wordpress.com/2011/12/11/the-beauty-of-roots/">https://johncarlosbaez.wordpress.com/2011/12/11/the-beauty-of-roots/</a>.</li>
+    <li id="ref-3">J. Baez. (2009) This Week's Finds in Mathematical Physics (Week 285). The n-Category Café. URL: <a href="https://golem.ph.utexas.edu/category/2009/12/this_weeks_finds_in_mathematic_46.html">https://golem.ph.utexas.edu/category/2009/12/this_weeks_finds_in_mathematic_46.html</a>.</li>
+    <li id="ref-4">J. Baez. (2023) The Beauty of Roots. URL: <a href="https://math.ucr.edu/home/baez/roots/">https://math.ucr.edu/home/baez/roots/</a>.</li>
+    <li id="ref-5">J.E. Hutchinson. (1981) Fractals and Self Similarity. Indiana University Mathematics Journal, 30, 713-747.</li>
+    <li id="ref-6">T. Bousch. (1988) Paires de similitudes Z -> SZ+1, Z -> SZ-1. Unpublished manuscript. URL: <a href="https://www.imo.universite-paris-saclay.fr/~thierry.bousch/preprints/">https://www.imo.universite-paris-saclay.fr/~thierry.bousch/preprints/</a>.</li>
+    <li id="ref-7">Kigami J. (2001) Analysis on Fractals. Cambridge University Press.</li>
+    <li id="ref-8">Hata M. (1985) On the structure of self-similar sets. Japan J. Appl. Math. 2, 381–414.</li>
+    <li id="ref-9">A.M. Odlyzko, B. Poonen. (1993) Zeros of Polynomials with 0, 1 Coefficients. L’Enseignement Mathématique, 39, 317.</li>
+    <li id="ref-10">D. Calegari, S. Koch, A. Walker. (2017) Roots, Schottky semigroups, and a proof of Bandt’s conjecture. Ergodic Theory and Dynamical Systems, 37(8):2487-2555.</li>
+    <li id="ref-11">B. Espigule, D. Juher; J. Saldaña. (2024) Collinear Fractals and Bandt’s Conjecture. Fractal Fract, 8, 725.</li>
+</ol>
+
+<p>&copy; 2026 Moses Mok</p>
+
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+
+<script>
+    const preamble = `
+    \\DeclareMathOperator{\\im}{im}
+    \\DeclareMathOperator{\\ker}{ker}
+    \\DeclareMathOperator{\\sign}{sign}
+    \\DeclareMathOperator{\\ccl}{ccl}
+    \\DeclareMathOperator{\\Re}{Re}
+    \\DeclareMathOperator{\\Im}{Im}
+    \\DeclareMathOperator{\\var}{var}
+    \\DeclareMathOperator{\\cov}{cov}
+    \\DeclareMathOperator{\\cl}{cl}
+    \\DeclareMathOperator{\\scl}{scl}
+    \\DeclareMathOperator{\\tr}{tr}
+    \\DeclareMathOperator{\\rk}{rk}
+    \\DeclareMathOperator{\\Sym}{Sym}
+    \\DeclareMathOperator{\\GL}{GL}
+    \\DeclareMathOperator{\\SL}{SL}
+    \\DeclareMathOperator{\\ord}{ord}
+    \\DeclareMathOperator{\\Log}{Log}
+    \\DeclareMathOperator{\\Aut}{Aut}
+    \\DeclareMathOperator{\\Gal}{Gal}
+    \\DeclareMathOperator{\\Hom}{Hom}
+    \\DeclareMathOperator*{\\Res}{Res}
+    \\DeclareMathOperator*{\\limup}{\\,{\\uparrow} lim\\,}
+    \\DeclareMathOperator*{\\limdown}{\\,{\\downarrow} lim\\,}
+
+    \\newcommand{\\id}{\\mathrm{id}}
+    \\newcommand{\\op}{\\operatorname}
+    \\newcommand{\\R}{\\mathbb{R}}
+    \\newcommand{\\C}{\\mathbb{C}}
+    \\newcommand{\\Z}{\\mathbb{Z}}
+    \\newcommand{\\Q}{\\mathbb{Q}}
+    \\newcommand{\\N}{\\mathbb{N}}
+    \\newcommand{\\I}{\\mathrm{I}}
+    \\newcommand{\\II}{\\mathrm{II}}
+    \\newcommand{\\se}{\\{#1\\}}
+    \\newcommand{\\sb}[2]{\\left\\{#1\\;\\middle|\\; #2\\right\\}}
+    \\newcommand{\\actson}{\\curvearrowright}
+    \\newcommand{\\mrm}[1]{\\mathrm{#1}}
+    \\newcommand{\\Ci}{\\mathbb{C}_\\infty}
+    \\newcommand{\\inv}{^{-1}}
+    \\newcommand{\\pmat}[1]{\\begin{pmatrix}#1\\end{pmatrix}}
+    \\newcommand{\\gen}[1]{\\left\\langle #1 \\right\\rangle}
+    \\newcommand{\\isom}{\\cong}
+    \\newcommand{\\v}[1]{\\boldsymbol{\\mathbf{#1}}}
+    \\newcommand{\\vhat}[1]{\\hat{\\v{#1}}}
+    \\newcommand{\\dv}[1]{\\dot{\\v{#1}}}
+    \\newcommand{\\ddv}[1]{\\ddot{\\v{#1}}}
+    \\newcommand{\\matr}[1]{\\mathsf{#1}}
+    \\newcommand{\\ub}{\\underbrace}
+    \\newcommand{\\union}{\\cup}
+    \\newcommand{\\inter}{\\cap}
+    \\newcommand{\\sumi}[3]{\\sum_{{#1} = {#2}}^{#3}}
+    \\newcommand{\\sl}[2]{\\mathrm{SL}_{#1}(#2)}
+    \\newcommand{\\gl}[2]{\\mathrm{GL}_{#1}(#2)}
+    \\newcommand{\\prob}{\\operatorname{\\mathbb{P}}}
+    \\newcommand{\\expect}{\\operatorname{\\mathbb{E}}}
+    \\newcommand{\\d}{\\operatorname{d\\!}{}}
+    \\newcommand{\\dfd}[3][]{\\frac{\\mathrm{d}^{#1}{#2}}{\\mathrm{d}{#3}^{#1}}}
+    \\newcommand{\\dvd}[3][]{\\frac{\\mathrm{d}^{#1}\\v{#2}}{\\mathrm{d}{#3}^{#1}}}
+    \\newcommand{\\pdfd}[3][]{\\frac{\\partial^{#1}{#2}}{\\partial{#3}^{#1}}}
+    \\newcommand{\\pdvd}[3][]{\\frac{\\partial^{#1}\\v{#2}}{\\partial{#3}^{#1}}}
+    \\newcommand{\\dd}[2][]{\\frac{\\mathrm{d}^{#1}}{\\mathrm{d}{#2}^{#1}}}
+    \\newcommand{\\pdd}[2][]{\\frac{\\partial^{#1}}{\\partial{#2}^{#1}}}
+    \\newcommand{\\pdxd}[2]{\\frac{\\partial^2}{\\partial{#1}\\partial{#2}}}
+    \\newcommand{\\pdfxd}[3]{\\frac{\\partial^2{#1}}{\\partial{#2}\\partial{#3}}}
+    \\newcommand{\\vnabla}{\\v\\nabla}
+    \\newcommand{\\mathbsf}[1]{\\boldsymbol{\\mathsf{#1}}}
+    \\newcommand{\\ouline}[1]{\\overline{\\underline{#1}}}
+    \\newcommand{\\tto}{\\rightrightarrows}
+
+    \\newcommand{\\for}[5][=]{#2_{{#3}{#1}{#4}}^{#5}}
+    \\newcommand{\\fsum}[4][=]{\\for[#1]{\\sum}{#2}{#3}{#4}}
+
+    \\newcommand{\\operp}{⦹}
+
+    \\newcommand{\\rel}{\\ \\ \\mathrm{rel}\\ }
+
+    \\newcommand{\\mapsfrom}{\\leftarrow\\!\\shortmid}
+
+    `
+
+    MathJax = {
+        loader: {
+            load: [
+                '[tex]/extpfeil',
+                '[tex]/mathtools',
+            ],
+        },
+        tex: {
+            inlineMath: [['$', '$']],
+            displayMath: [['$$', '$$']],
+            extensions: ["extpfeil.js"],
+            packages: {'[+]': [
+                'mathtools',
+                'extpfeil',
+            ]},
+        },
+        startup: {
+            ready: () => {
+                MathJax.startup.defaultReady();
+                MathJax.tex2chtml(preamble);
+
+                const unicodeRanges = MathJax._.core.MmlTree.OperatorDictionary.RANGES;
+                unicodeRanges[4][0] = 0x03AC;
+                unicodeRanges.splice(4, 0, [880, 940, 0, "mo"]);
+            },
+        },
+    };
+
+    <!-- setTimeout(() => window.location.reload(), 10000); -->
+</script>
 </body>
 </html>

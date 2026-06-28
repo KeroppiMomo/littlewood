@@ -1,3 +1,9 @@
+const isInIframe = window.self !== window.top;
+
+if (isInIframe) {
+    document.getElementById("desc").remove();
+}
+
 const canvasSize = Math.min(window.innerWidth / 2, (window.innerHeight - 150)/2) - 30;
 
 //
@@ -61,9 +67,11 @@ const sketch1 = (p) => {
         p.line(state.pointX - crossRadius, state.pointY + crossRadius, state.pointX + crossRadius, state.pointY - crossRadius);
 
         p.pop()
+
+        p.noLoop();
     };
 
-    p.mousePressed = () => {
+    p.mousePressed = p.touchStarted = () => {
         p.push();
 
         const d = p.dist(
@@ -80,7 +88,7 @@ const sketch1 = (p) => {
         p.pop();
     };
 
-    p.mouseDragged = () => {
+    p.mouseDragged = p.touchMoved = () => {
         if (!dragging) return;
 
         state.pointX = -(1 - p.constrain(p.mouseX, 0, W)/W) * imageSize;
@@ -92,10 +100,13 @@ const sketch1 = (p) => {
             state.pointY *= 0.78 / norm;
         }
 
+        p.loop();
+        p2.loop();
+        p3.loop();
         setCaption();
     };
 
-    p.mouseReleased = () => {
+    p.mouseReleased = p.touchEnded = () => {
         dragging = false;
     };
 };
@@ -143,6 +154,7 @@ const sketch2 = (p) => {
         if (image) {
             p.push();
             p.scale(1, -1);
+            p.image(bgImage, -bgImageSize, 0, bgImageSize, bgImageSize);
             p.image(image, -imageSize, 0, imageSize, imageSize);
             p.pop();
         }
@@ -155,7 +167,8 @@ const sketch2 = (p) => {
         p.line(state.pointX - crossRadius, state.pointY + crossRadius, state.pointX + crossRadius, state.pointY - crossRadius);
 
         p.pop();
-    }
+        p.noLoop();
+    };
 };
 
 //
@@ -168,6 +181,7 @@ const sketch3 = (p) => {
 
     let lastX = null;
     let lastY = null;
+    let lastTime = null;
 
     p.setup = () => {
         p.createCanvas(W, H);
@@ -178,7 +192,14 @@ const sketch3 = (p) => {
             p.background(0);
             lastX = state.pointX;
             lastY = state.pointY;
+            lastTime = Date.now();
         }
+
+        if (Date.now() - lastTime > 5000) {
+            p.noLoop();
+            return;
+        }
+        p.loop();
 
         p.push();
         p.translate(W/2, H/2);
@@ -210,6 +231,6 @@ const sketch3 = (p) => {
 //
 // Create p5 instances
 //
-new p5(sketch1, "canvas1");
-new p5(sketch2, "canvas2");
-new p5(sketch3, "canvas3");
+const p1 = new p5(sketch1, "canvas1");
+const p2 = new p5(sketch2, "canvas2");
+const p3 = new p5(sketch3, "canvas3");
